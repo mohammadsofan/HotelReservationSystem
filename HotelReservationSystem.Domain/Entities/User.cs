@@ -2,10 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 namespace HotelReservationSystem.Domain.Entities
 {
-    public class User
+    public class User:BaseEntity
     {
-        [Required]
-        public long Id { get; set; }
         [Required]
         [StringLength(100, MinimumLength = 3)]
         public string Username { get; set; } = string.Empty;
@@ -28,10 +26,6 @@ namespace HotelReservationSystem.Domain.Entities
         public string IdCard { get; set; } = string.Empty;
         [Required]
         public string Role { get; set; } = ApplicationRoles.Guest;
-        [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        [Required]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }

@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace HotelReservationSystem.Domain.Entities
 {
-    public class Review
+    public class Review:BaseEntity
     {
-        [Required]
-        public long Id { get; set; }
         [Required]
         public long UserId { get; set; }
         public User? User { get; set; }
