@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36401.2 d17.14
+VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelReservationSystem.Api", "HotelReservationSystem.Api\HotelReservationSystem.Api.csproj", "{4A6672C0-2912-44E6-A7D9-5719FBC3D0EE}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelReservationSystem.Application", "HotelReservationSystem.Application\HotelReservationSystem.Application.csproj", "{59D65C7A-C5EE-4657-AF80-E319DF1DEEB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelReservationSystem.Infrastructure", "HotelReservationSystem.Infrastructure\HotelReservationSystem.Infrastructure.csproj", "{CC499A22-7CA4-47F3-8F0C-612068E5F456}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{E585EEE8-4C2C-4887-AD7E-BF1B1B19814C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{95C89654-9185-4DBB-A7C5-13A354494C0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +42,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A6672C0-2912-44E6-A7D9-5719FBC3D0EE} = {95C89654-9185-4DBB-A7C5-13A354494C0A}
+		{D6AA33F9-5BC3-46EA-A858-8A1C2E47843B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{59D65C7A-C5EE-4657-AF80-E319DF1DEEB6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CC499A22-7CA4-47F3-8F0C-612068E5F456} = {E585EEE8-4C2C-4887-AD7E-BF1B1B19814C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBC224D8-117D-4D05-BBC7-886EB7917A68}

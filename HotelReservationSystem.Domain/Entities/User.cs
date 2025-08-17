@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HotelReservationSystem.Domain.Constants;
+using System.ComponentModel.DataAnnotations;
 namespace HotelReservationSystem.Domain.Entities
 {
     public class User
@@ -26,8 +27,12 @@ namespace HotelReservationSystem.Domain.Entities
         [StringLength(100, MinimumLength = 6)]
         public string IdCard { get; set; } = string.Empty;
         [Required]
+        public string Role { get; set; } = ApplicationRoles.Guest;
+        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
