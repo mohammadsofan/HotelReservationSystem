@@ -20,7 +20,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             var existingUser = await _userRepository.GetOneByFilterAsync(u => u.Id == userId);
             if(existingUser == null)
             {
-                throw new NotFoundException("User not found.");
+                throw new NotFoundException($"User with id {userId} not found.");
             }
             var requestDto = request.RequestDto;
             var user = existingUser.Adapt<Domain.Entities.User>();

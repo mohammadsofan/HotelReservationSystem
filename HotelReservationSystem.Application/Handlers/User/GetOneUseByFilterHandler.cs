@@ -21,7 +21,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             var user = await _userRepository.GetOneByFilterAsync(filter);
             if(user is null)
             {
-                throw new NotFoundException($"User not found.");
+                throw new NotFoundException($"User with filter not found.");
             }
             return user.Adapt<UserResponseDto>();
         }

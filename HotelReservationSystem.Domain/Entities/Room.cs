@@ -10,7 +10,7 @@ namespace HotelReservationSystem.Domain.Entities
         [Range(0, double.MaxValue)]
         public decimal PricePerNight { get; set; }
         [Required]
-        [Range(0, int.MaxValue)]
+        [Range(1, int.MaxValue)]
         public int MaxOccupancy { get; set; }
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
