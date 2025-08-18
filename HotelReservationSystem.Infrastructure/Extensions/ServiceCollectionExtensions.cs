@@ -5,6 +5,7 @@ using HotelReservationSystem.Infrastructure.Repositories;
 using HotelReservationSystem.Infrastructure.Seeders;
 using HotelReservationSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +48,8 @@ namespace HotelReservationSystem.Infrastructure.Extensions
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IReviewRepository,ReviewRepository>();
             services.AddScoped<IFacilityRepository, FacilityRepository>();
+            services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
+            services.AddScoped<IPasswordHashingService, PasswordHashingService>();
         }
     }
 }
