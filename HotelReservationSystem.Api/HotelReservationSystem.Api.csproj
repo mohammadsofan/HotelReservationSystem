@@ -19,6 +19,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HotelReservationSystem.Application\HotelReservationSystem.Application.csproj" />
+    <ProjectReference Include="..\HotelReservationSystem.Infrastructure\HotelReservationSystem.Infrastructure.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.19">
+	    <PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
 </Project>
