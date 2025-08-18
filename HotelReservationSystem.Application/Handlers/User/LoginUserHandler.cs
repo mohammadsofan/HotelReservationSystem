@@ -35,8 +35,7 @@ namespace HotelReservationSystem.Application.Handlers.User
                 user.Id.ToString(),
                 user.Username,
                 user.Email,
-                user.Role.ToString(),
-                DateTime.UtcNow.AddHours(1)
+                user.Role.ToString()
                 );
 
             return new LoginUserResponseDto

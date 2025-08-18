@@ -1,5 +1,7 @@
 
+using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace HotelReservationSystem.Api
 {
@@ -16,6 +18,8 @@ namespace HotelReservationSystem.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.Configure<JwtSettings>(
+                    builder.Configuration.GetSection("JwtSettings"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
