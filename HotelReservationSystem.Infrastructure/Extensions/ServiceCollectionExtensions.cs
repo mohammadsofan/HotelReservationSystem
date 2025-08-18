@@ -39,6 +39,14 @@ namespace HotelReservationSystem.Infrastructure.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings").Get<JwtSettings>()!.SecretKey))
                 };
             });
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<HotelSeeder>();
+            services.AddScoped<IUserRepository,IUserRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomFacilitiesRepository, RoomFacilitiesRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IReviewRepository,ReviewRepository>();
+            services.AddScoped<IFacilityRepository, FacilityRepository>();
         }
     }
 }
