@@ -1,6 +1,7 @@
 ﻿using HotelReservationSystem.Application.Interfaces;
 using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Data;
+using HotelReservationSystem.Infrastructure.Seeders;
 using HotelReservationSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,7 @@ namespace HotelReservationSystem.Infrastructure.Extensions
                 };
             });
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<HotelSeeder>();
         }
     }
 }

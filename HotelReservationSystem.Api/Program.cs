@@ -1,13 +1,15 @@
 
 using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Extensions;
+using HotelReservationSystem.Infrastructure.Seeders;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,10 @@ namespace HotelReservationSystem.Api
 
             app.MapControllers();
 
+            using (var scope = app.Services.CreateScope()) {
+                var seeder = scope.ServiceProvider.GetRequiredService<HotelSeeder>();
+                await seeder.Seed();
+            }
             app.Run();
         }
     }
