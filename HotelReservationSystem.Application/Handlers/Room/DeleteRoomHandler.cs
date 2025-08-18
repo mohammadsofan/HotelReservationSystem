@@ -21,12 +21,11 @@ namespace HotelReservationSystem.Application.Handlers.Room
         public async Task Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
         {
             var roomId = request.RoomId;
-            var room = await _roomRepository.GetOneByFilterAsync(r=>r.Id == roomId);
-            if (room == null)
+            var deleted = await _roomRepository.DeleteAsync(roomId);
+            if (!deleted)
             {
                 throw new NotFoundException($"Room with id {roomId} not found.");
             }
-            await _roomRepository.DeleteAsync(roomId);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HotelReservationSystem.Application.Interfaces;
 using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Data;
+using HotelReservationSystem.Infrastructure.Repositories;
 using HotelReservationSystem.Infrastructure.Seeders;
 using HotelReservationSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,8 +39,6 @@ namespace HotelReservationSystem.Infrastructure.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtSettings").Get<JwtSettings>()!.SecretKey))
                 };
             });
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<HotelSeeder>();
         }
     }
 }
