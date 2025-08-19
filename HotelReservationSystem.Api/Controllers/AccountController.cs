@@ -41,6 +41,11 @@ namespace HotelReservationSystem.Api.Controllers
         }
         [HttpPost("login")]
         [AllowAnonymous]
+        public async Task<IActionResult> UpdateUserAsync([FromRoute] long id, [FromBody] CreateUserRequestDto user)
+        {
+            await _mediator.Send(new UpdateUserCommand(id, user));
+            return NoContent();
+        }
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequestDto request)
         {
             var res = await _mediator.Send(new LoginUserCommand(request));
