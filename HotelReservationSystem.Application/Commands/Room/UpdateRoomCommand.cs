@@ -11,9 +11,9 @@ namespace HotelReservationSystem.Application.Commands.Room
     public class UpdateRoomCommand:IRequest<Unit>
     {
         public long RoomId { get; set; }
-        public CreateRoomRequestDto RequestDto { get;}
+        public RoomRequestDto RequestDto { get;}
 
-        public UpdateRoomCommand(long roomId,CreateRoomRequestDto requestDto)
+        public UpdateRoomCommand(long roomId,RoomRequestDto requestDto)
         {
             RoomId = roomId;
             RequestDto = requestDto;

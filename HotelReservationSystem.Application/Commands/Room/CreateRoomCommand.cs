@@ -11,9 +11,9 @@ namespace HotelReservationSystem.Application.Commands.Room
 {
     public class CreateRoomCommand:IRequest<RoomResponseDto>
     {
-        public CreateRoomRequestDto RequestDto { get; }
+        public RoomRequestDto RequestDto { get; }
 
-        public CreateRoomCommand(CreateRoomRequestDto requestDto)
+        public CreateRoomCommand(RoomRequestDto requestDto)
         {
             RequestDto = requestDto;
         }

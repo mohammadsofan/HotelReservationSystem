@@ -22,13 +22,13 @@ namespace HotelReservationSystem.Api.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<IActionResult> GetOneUserAsync()
+        public async Task<IActionResult> GetAllUsersAsync()
         {
             var res = await _mediator.Send(new GetUsersByFilterQuery());
             return Ok(ApiResponse<IEnumerable<UserResponseDto>>.Ok("Users retrieved successfully.", res));
         }
-        [HttpGet("{id}",Name = "GetOneUserAsync")]
-        public async Task<IActionResult> GetOneUserAsync([FromRoute] long id)
+        [HttpGet("{id}",Name = "GetUserByIdAsync")]
+        public async Task<IActionResult> GetUserByIdAsync([FromRoute] long id)
         {
             var res = await _mediator.Send(new GetOneUserByFilterQuery(u => u.Id == id));
             return Ok(ApiResponse<UserResponseDto>.Ok("User retrieved successfully.", res));
@@ -39,7 +39,7 @@ namespace HotelReservationSystem.Api.Controllers
             var res = await _mediator.Send(new DeleteUserCommand(id));
             return NoContent();
         }
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateUserAsync([FromRoute] long id, [FromBody] UpdateUserRequestDto user)
         {
             await _mediator.Send(new UpdateUserCommand(id, user));
@@ -57,7 +57,7 @@ namespace HotelReservationSystem.Api.Controllers
         public async Task<IActionResult> RegisterUserAsync([FromBody] CreateUserRequestDto request)
         {
             var res = await _mediator.Send(new CreateUserCommand(request));
-            return CreatedAtRoute(nameof(GetOneUserAsync), new { id = res.Id }, ApiResponse<UserResponseDto>.Ok("User registered successfully.", res));
+            return CreatedAtRoute(nameof(GetUserByIdAsync), new { id = res.Id }, ApiResponse<UserResponseDto>.Ok("User registered successfully.", res));
         }
 
     }

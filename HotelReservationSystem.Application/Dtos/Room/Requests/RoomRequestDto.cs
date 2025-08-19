@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Dtos.Room.Requests
 {
-    public class CreateRoomRequestDto
+    public class RoomRequestDto
     {
         public RoomType Type { get; set; }
         public decimal PricePerNight { get; set; }

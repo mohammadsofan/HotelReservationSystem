@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Validators.Room
 {
-    public class RoomDtoValidator:AbstractValidator<CreateRoomRequestDto>
+    public class RoomDtoValidator:AbstractValidator<RoomRequestDto>
     {
         public RoomDtoValidator() {
             RuleFor(r => r.Type).NotEmpty().WithMessage("Room type required.");
