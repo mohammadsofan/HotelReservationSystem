@@ -1,10 +1,11 @@
 ﻿using HotelReservationSystem.Application.Interfaces;
+using HotelReservationSystem.Domain.Entities;
 using HotelReservationSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 namespace HotelReservationSystem.Infrastructure.Repositories
 {
-    internal class Repository<T> : IRepository<T> where T : class
+    internal class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -26,7 +27,9 @@ namespace HotelReservationSystem.Infrastructure.Repositories
             {
                 return false;
             }
-            _dbSet.Remove(entity);
+            
+            entity.IsDeleted = true;
+            entity.DeletedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

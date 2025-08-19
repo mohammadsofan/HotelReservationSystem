@@ -20,6 +20,7 @@ namespace HotelReservationSystem.Api
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.Configure<JwtSettings>(
                     builder.Configuration.GetSection("JwtSettings"));
+            builder.Services.AddAuthorization();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,7 +31,7 @@ namespace HotelReservationSystem.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
