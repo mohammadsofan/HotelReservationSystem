@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Handlers.Room
 {
-    public class UpdateRoomHandler : IRequestHandler<UpdateRoomCommand>
+    public class UpdateRoomHandler : IRequestHandler<UpdateRoomCommand,Unit>
     {
         private readonly IRoomRepository _roomRepository;
 
         public UpdateRoomHandler(IRoomRepository roomRepository) {
             _roomRepository = roomRepository;
         }
-        public async Task Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
         {
             var roomId = request.RoomId;
             var requestDto = request.RequestDto;
@@ -32,6 +32,7 @@ namespace HotelReservationSystem.Application.Handlers.Room
             var room = requestDto.Adapt<Domain.Entities.Room>();
             room.Id=existingRoom.Id;
             await _roomRepository.UpdateAsync(room);
+            return Unit.Value;
         }
     }
 }

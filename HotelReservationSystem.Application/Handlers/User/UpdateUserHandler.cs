@@ -6,7 +6,7 @@ using MediatR;
 
 namespace HotelReservationSystem.Application.Handlers.User
 {
-    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand>
+    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand,Unit>
     {
         private readonly IUserRepository _userRepository;
 
@@ -14,7 +14,7 @@ namespace HotelReservationSystem.Application.Handlers.User
         {
             _userRepository = userRepository;
         }
-        public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var userId = request.UserId;
             var existingUser = await _userRepository.GetOneByFilterAsync(u => u.Id == userId);
@@ -26,6 +26,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             var user = existingUser.Adapt<Domain.Entities.User>();
             user.Id = userId;
             await _userRepository.UpdateAsync(user, cancellationToken);
+            return Unit.Value;
         }
     }
 }

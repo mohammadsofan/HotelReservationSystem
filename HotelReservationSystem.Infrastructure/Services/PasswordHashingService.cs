@@ -21,7 +21,7 @@ namespace HotelReservationSystem.Infrastructure.Services
             return _passwordHasher.HashPassword(new { },password);
         }
 
-        public bool VerifyHashedPassword(string hashedPassword, string password)
+        public bool VerifyHashedPassword(string password, string hashedPassword)
         {
             var result = _passwordHasher.VerifyHashedPassword(new { }, hashedPassword, password);
             return result == PasswordVerificationResult.Success;

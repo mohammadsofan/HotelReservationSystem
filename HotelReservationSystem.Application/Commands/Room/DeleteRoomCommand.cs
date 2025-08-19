@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Commands.Room
 {
-    public class DeleteRoomCommand:IRequest
+    public class DeleteRoomCommand:IRequest<Unit>
     {
         public long RoomId { get; }
 

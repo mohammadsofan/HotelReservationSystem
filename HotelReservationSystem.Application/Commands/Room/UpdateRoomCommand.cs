@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Commands.Room
 {
-    public class UpdateRoomCommand:IRequest
+    public class UpdateRoomCommand:IRequest<Unit>
     {
         public long RoomId { get; set; }
         public CreateRoomRequestDto RequestDto { get;}

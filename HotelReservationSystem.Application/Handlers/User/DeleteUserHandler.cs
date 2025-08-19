@@ -5,7 +5,7 @@ using MediatR;
 
 namespace HotelReservationSystem.Application.Handlers.User
 {
-    public class DeleteUserHandler : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserHandler : IRequestHandler<DeleteUserCommand,Unit>
     {
         private readonly IUserRepository _userRepository;
 
@@ -13,7 +13,7 @@ namespace HotelReservationSystem.Application.Handlers.User
         {
             _userRepository = userRepository;
         }
-        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var userId = request.UserId;
             var deleted = await _userRepository.DeleteAsync(userId, cancellationToken);
@@ -21,6 +21,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             {
                 throw new NotFoundException($"User with ID {userId} not found.");
             }
+            return Unit.Value;
         }
     }
 }

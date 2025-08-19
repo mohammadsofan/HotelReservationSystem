@@ -1,10 +1,7 @@
-
+using HotelReservationSystem.Application.Extensions;
 using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Extensions;
 using HotelReservationSystem.Infrastructure.Seeders;
-using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
-
 namespace HotelReservationSystem.Api
 {
     public class Program
@@ -19,6 +16,7 @@ namespace HotelReservationSystem.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.Configure<JwtSettings>(
                     builder.Configuration.GetSection("JwtSettings"));

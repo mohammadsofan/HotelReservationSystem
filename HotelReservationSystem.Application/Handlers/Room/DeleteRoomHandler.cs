@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Handlers.Room
 {
-    public class DeleteRoomHandler : IRequestHandler<DeleteRoomCommand>
+    public class DeleteRoomHandler : IRequestHandler<DeleteRoomCommand,Unit>
     {
         private readonly IRoomRepository _roomRepository;
 
@@ -18,7 +18,7 @@ namespace HotelReservationSystem.Application.Handlers.Room
         {
             _roomRepository = roomRepository;
         }
-        public async Task Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
         {
             var roomId = request.RoomId;
             var deleted = await _roomRepository.DeleteAsync(roomId);
@@ -26,6 +26,7 @@ namespace HotelReservationSystem.Application.Handlers.Room
             {
                 throw new NotFoundException($"Room with id {roomId} not found.");
             }
+            return Unit.Value;
         }
     }
 }

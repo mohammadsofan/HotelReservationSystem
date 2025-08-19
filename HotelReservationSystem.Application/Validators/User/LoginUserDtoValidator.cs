@@ -1,11 +1,5 @@
 ﻿using FluentValidation;
 using HotelReservationSystem.Application.Dtos.User.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace HotelReservationSystem.Application.Validators.User
 {
     public class LoginUserDtoValidator:AbstractValidator<LoginUserRequestDto>

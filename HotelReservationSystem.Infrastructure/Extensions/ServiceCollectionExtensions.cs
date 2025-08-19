@@ -42,7 +42,7 @@ namespace HotelReservationSystem.Infrastructure.Extensions
             });
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<HotelSeeder>();
-            services.AddScoped<IUserRepository,IUserRepository>();
+            services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IRoomFacilitiesRepository, RoomFacilitiesRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
