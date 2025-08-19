@@ -1,3 +1,4 @@
+using HotelReservationSystem.Api.Middlewares;
 using HotelReservationSystem.Application.Extensions;
 using HotelReservationSystem.Application.Settings;
 using HotelReservationSystem.Infrastructure.Extensions;
@@ -21,6 +22,7 @@ namespace HotelReservationSystem.Api
             builder.Services.Configure<JwtSettings>(
                     builder.Configuration.GetSection("JwtSettings"));
             builder.Services.AddAuthorization();
+            builder.Services.AddTransient<ExceptionHandlingMiddleware>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,7 +31,7 @@ namespace HotelReservationSystem.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

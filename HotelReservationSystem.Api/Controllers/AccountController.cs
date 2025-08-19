@@ -4,6 +4,7 @@ using HotelReservationSystem.Application.Dtos.User.Requests;
 using HotelReservationSystem.Application.Dtos.User.Responses;
 using HotelReservationSystem.Application.Queries.User;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace HotelReservationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -38,12 +40,14 @@ namespace HotelReservationSystem.Api.Controllers
             return NoContent();
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequestDto request)
         {
             var res = await _mediator.Send(new LoginUserCommand(request));
             return Ok(ApiResponse<LoginUserResponseDto>.Ok("User logged in successfully.", res));
         }
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterUserAsync([FromBody] CreateUserRequestDto request)
         {
             var res = await _mediator.Send(new CreateUserCommand(request));
