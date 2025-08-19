@@ -1,5 +1,6 @@
 ﻿using HotelReservationSystem.Application.Commands.User;
 using HotelReservationSystem.Application.Dtos.User.Requests;
+using HotelReservationSystem.Domain.Constants;
 using HotelReservationSystem.Domain.Entities;
 using HotelReservationSystem.Infrastructure.Data;
 using MediatR;
@@ -30,7 +31,7 @@ namespace HotelReservationSystem.Infrastructure.Seeders
             }
             catch(Exception ex)
             {
-                throw new Exception($"could not Migrate the database {ex.Message}");
+                throw new Exception($"could not Migrate the database",ex);
             }
 
             try
@@ -38,7 +39,7 @@ namespace HotelReservationSystem.Infrastructure.Seeders
                 if (await _context.Database.CanConnectAsync())
                 {
                     if (!_context.Users.Any()) {
-                        await _mediator.Send(new CreateUserCommand(
+                        var admin = await _mediator.Send(new CreateUserCommand(
                              new CreateUserRequestDto()
                              {
                                  Email = "admin@admin.com",
@@ -48,13 +49,14 @@ namespace HotelReservationSystem.Infrastructure.Seeders
                                  IdCard = "00000000",
                                  PhoneNumber = "0000000000",
                                  Username = "Admin"
-                             }));    
+                                
+                             },ApplicationRoles.Admin));
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not connect to the db {ex.Message}");
+                throw new Exception($"Could not connect to the db",ex);
             }
         }
     }
