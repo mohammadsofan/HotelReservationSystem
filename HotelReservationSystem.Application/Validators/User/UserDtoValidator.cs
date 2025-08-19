@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Validators.User
 {
-    public class UserValidator:AbstractValidator<CreateUserRequestDto>
+    public class UserDtoValidator:AbstractValidator<CreateUserRequestDto>
     {
-        public UserValidator() {
+        public UserDtoValidator() {
             RuleFor(u => u.IdCard).NotEmpty().WithMessage("User id card is required");
             RuleFor(u => u.Username).NotEmpty().WithMessage("UserName is required")
                 .Length(3, 100).WithMessage("UserName length must be withen 3 to 100 character");

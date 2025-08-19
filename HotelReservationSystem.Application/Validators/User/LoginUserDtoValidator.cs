@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Validators.User
 {
-    public class LoginUserValidator:AbstractValidator<LoginUserRequestDto>
+    public class LoginUserDtoValidator:AbstractValidator<LoginUserRequestDto>
     {
-        public LoginUserValidator() {
+        public LoginUserDtoValidator() {
             RuleFor(u => u.Email).NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Email is not valid");
             RuleFor(u => u.Password).NotEmpty().WithMessage("Password is required");

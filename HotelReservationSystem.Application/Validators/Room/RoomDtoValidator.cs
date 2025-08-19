@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace HotelReservationSystem.Application.Validators.Room
 {
-    public class RoomValidator:AbstractValidator<CreateRoomRequestDto>
+    public class RoomDtoValidator:AbstractValidator<CreateRoomRequestDto>
     {
-        public RoomValidator() {
+        public RoomDtoValidator() {
             RuleFor(r => r.Type).NotEmpty().WithMessage("Room type required.");
             RuleFor(r => r.PricePerNight).NotEmpty().WithMessage("Price required.")
                 .GreaterThanOrEqualTo(0).WithMessage("Price can't be negative.");
