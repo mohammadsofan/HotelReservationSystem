@@ -33,19 +33,20 @@ namespace HotelReservationSystem.Api.Controllers
             var res = await _mediator.Send(new GetOneUserByFilterQuery(u => u.Id == id));
             return Ok(ApiResponse<UserResponseDto>.Ok("User retrieved successfully.", res));
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserAsync([FromRoute] long id)
         {
             var res = await _mediator.Send(new DeleteUserCommand(id));
             return NoContent();
         }
-        [HttpPost("login")]
-        [AllowAnonymous]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAsync([FromRoute] long id, [FromBody] CreateUserRequestDto user)
         {
             await _mediator.Send(new UpdateUserCommand(id, user));
             return NoContent();
         }
+        [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserRequestDto request)
         {
             var res = await _mediator.Send(new LoginUserCommand(request));
