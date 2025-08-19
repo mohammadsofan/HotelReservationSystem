@@ -23,6 +23,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             var hashedPassword = _passwordHasher.HashPassword(requestDto.Password);
             var user = requestDto.Adapt<Domain.Entities.User>();
             user.HashedPassword = hashedPassword;
+            user.Role = request.Role;
             user = await _userRepository.CreateAsync(user, cancellationToken);          
             return user.Adapt<UserResponseDto>();
         }

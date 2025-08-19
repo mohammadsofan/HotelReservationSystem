@@ -23,9 +23,12 @@ namespace HotelReservationSystem.Application.Handlers.User
                 throw new NotFoundException($"User with id {userId} not found.");
             }
             var requestDto = request.RequestDto;
-            var user = existingUser.Adapt<Domain.Entities.User>();
-            user.Id = userId;
-            await _userRepository.UpdateAsync(user, cancellationToken);
+            existingUser.Username = requestDto.Username;
+            existingUser.FirstName = requestDto.FirstName;
+            existingUser.LastName = requestDto.LastName;
+            existingUser.PhoneNumber = requestDto.PhoneNumber;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+            await _userRepository.UpdateAsync(existingUser, cancellationToken);
             return Unit.Value;
         }
     }

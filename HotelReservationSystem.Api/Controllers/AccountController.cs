@@ -12,7 +12,7 @@ namespace HotelReservationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles="Admin")]
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -40,7 +40,7 @@ namespace HotelReservationSystem.Api.Controllers
             return NoContent();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync([FromRoute] long id, [FromBody] CreateUserRequestDto user)
+        public async Task<IActionResult> UpdateUserAsync([FromRoute] long id, [FromBody] UpdateUserRequestDto user)
         {
             await _mediator.Send(new UpdateUserCommand(id, user));
             return NoContent();

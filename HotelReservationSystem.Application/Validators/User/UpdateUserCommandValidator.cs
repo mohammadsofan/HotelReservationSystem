@@ -7,9 +7,14 @@ namespace HotelReservationSystem.Application.Validators.User
     {
         public UpdateUserCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmpty().WithMessage("User Id is required.")
-                .GreaterThan(0).WithMessage("User Id must be greater than zero");
-            RuleFor(c=>c.RequestDto).SetValidator(new UserDtoValidator());
+            RuleFor(c => c.RequestDto.Username).NotEmpty().WithMessage("UserName is required")
+                .Length(3, 100).WithMessage("UserName length must be withen 3 to 100 character");
+            RuleFor(c => c.RequestDto.FirstName).NotEmpty().WithMessage("FirstName is required")
+                .Length(3, 100).WithMessage("FirstName length must be withen 3 to 100 character");
+            RuleFor(c => c.RequestDto.LastName).NotEmpty().WithMessage("LastName is required")
+                .Length(3, 100).WithMessage("LastName length must be withen 3 to 100 character");
+            RuleFor(c => c.RequestDto.PhoneNumber).NotEmpty().WithMessage("PhoneNumber is required");
+
         }
     }
 }

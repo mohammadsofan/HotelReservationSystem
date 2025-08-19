@@ -7,7 +7,9 @@ namespace HotelReservationSystem.Application.Validators.User
     {
         public LoginUserCommandValidator()
         {
-            RuleFor(lu=>lu.RequestDto).SetValidator(new LoginUserDtoValidator());
+            RuleFor(u => u.RequestDto.Email).NotEmpty().WithMessage("Email is required")
+                .EmailAddress().WithMessage("Email is not valid");
+            RuleFor(u => u.RequestDto.Password).NotEmpty().WithMessage("Password is required");
         }
     }
 }

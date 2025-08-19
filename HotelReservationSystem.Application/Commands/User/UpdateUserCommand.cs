@@ -6,11 +6,10 @@ namespace HotelReservationSystem.Application.Commands.User
     public class UpdateUserCommand:IRequest<Unit>
     {
         public long UserId { get; set; }
-        public CreateUserRequestDto RequestDto { get; }
-        public UpdateUserCommand(long userId,CreateUserRequestDto requestDto)
+        public UpdateUserRequestDto RequestDto { get; }
+        public UpdateUserCommand(long userId,UpdateUserRequestDto requestDto)
         {
             UserId = userId;
-
             RequestDto = requestDto;
         }
     }
