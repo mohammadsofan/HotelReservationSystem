@@ -33,18 +33,39 @@ namespace HotelReservationSystem.Infrastructure.Repositories
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
-
-        public async Task<IEnumerable<T>> GetAllByFilterAsync(Expression<Func<T, bool>>? filter = null)
+        public async Task<bool> HardDeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-
-            return filter is null
-                ?await _dbSet.ToListAsync()
-                :await _dbSet.Where(filter).ToListAsync();
+            var entity = await _dbSet.FindAsync(id, cancellationToken);
+            if (entity == null)
+            {
+                return false;
+            }
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        public async Task<IEnumerable<T>> GetAllByFilterAsync(Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }   
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<T?> GetOneByFilterAsync(Expression<Func<T, bool>> filter)
+        public async Task<T?> GetOneByFilterAsync(Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.FirstOrDefaultAsync(filter);
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return await query.Where(filter).FirstOrDefaultAsync();
         }
 
         public async Task<bool> UpdateAsync(long id,T entity, CancellationToken cancellationToken = default)

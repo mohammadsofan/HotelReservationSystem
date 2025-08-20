@@ -7,6 +7,7 @@ using HotelReservationSystem.Application.Queries.Room;
 using HotelReservationSystem.Api.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using HotelReservationSystem.Domain.Constants;
+using HotelReservationSystem.Application.Dtos.Facility.Responses;
 
 namespace HotelReservationSystem.Api.Controllers
 {
@@ -35,7 +36,24 @@ namespace HotelReservationSystem.Api.Controllers
             var res = await _mediator.Send(new GetOneRoomByFilterQuery(r=>r.Id==id));
             return Ok(ApiResponse<RoomResponseDto>.Ok("Room retrieved successfully.", res));
         }
-
+        [HttpGet("{roomId}/facilities")]
+        public async Task<IActionResult> GetRoomFacilitiesAsync([FromRoute] long roomId)
+        {
+            var res = await _mediator.Send(new GetAllRoomFacilitiesQuery(roomId));
+            return Ok(ApiResponse<IEnumerable<FacilityResponseDto>>.Ok("Room facilities retrieved successfully.", res));
+        }
+        [HttpPost("{roomId}/facility/{facilityId}")]
+        public async Task<IActionResult> AssignFacilityToRoomAsync([FromRoute] long roomId, [FromRoute] long facilityId)
+        {
+            await _mediator.Send(new AssignFacilityToRoomCommand(roomId, facilityId));
+            return Created();
+        }
+        [HttpDelete("{roomId}/facility/{facilityId}")]
+        public async Task<IActionResult> RemoveFacilityFromRoomAsync([FromRoute] long roomId, [FromRoute] long facilityId)
+        {
+            await _mediator.Send(new RemoveFacilityFromRoomCommand(roomId, facilityId));
+            return NoContent();
+        }
         [HttpPost]
         public async Task<IActionResult> CreateRoomAsync([FromBody] RoomRequestDto request)
         {
