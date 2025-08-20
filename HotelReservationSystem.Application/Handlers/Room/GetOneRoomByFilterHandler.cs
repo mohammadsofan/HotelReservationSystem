@@ -2,15 +2,8 @@
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
 using HotelReservationSystem.Application.Queries.Room;
-using HotelReservationSystem.Domain.Entities;
 using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace HotelReservationSystem.Application.Handlers.Room
 {
     public class GetOneRoomByFilterHandler : IRequestHandler<GetOneRoomByFilterQuery, RoomResponseDto>

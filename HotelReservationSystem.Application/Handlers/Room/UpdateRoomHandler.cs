@@ -1,16 +1,7 @@
 ﻿using HotelReservationSystem.Application.Commands.Room;
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
-using HotelReservationSystem.Domain.Entities;
-using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace HotelReservationSystem.Application.Handlers.Room
 {
     public class UpdateRoomHandler : IRequestHandler<UpdateRoomCommand,Unit>
@@ -32,6 +23,8 @@ namespace HotelReservationSystem.Application.Handlers.Room
             existingRoom.PricePerNight = requestDto.PricePerNight;
             existingRoom.MaxOccupancy = requestDto.MaxOccupancy;
             existingRoom.Type = requestDto.Type;
+            existingRoom.FloorNumber = requestDto.FloorNumber;
+            existingRoom.RoomNumber = requestDto.RoomNumber;
             existingRoom.UpdatedAt = DateTime.UtcNow;
             await _roomRepository.UpdateAsync(existingRoom,cancellationToken);
             return Unit.Value;

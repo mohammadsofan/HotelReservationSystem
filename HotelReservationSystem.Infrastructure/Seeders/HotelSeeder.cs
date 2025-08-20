@@ -1,16 +1,9 @@
 ﻿using HotelReservationSystem.Application.Commands.User;
 using HotelReservationSystem.Application.Dtos.User.Requests;
 using HotelReservationSystem.Domain.Constants;
-using HotelReservationSystem.Domain.Entities;
 using HotelReservationSystem.Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace HotelReservationSystem.Infrastructure.Seeders
 {
     public class HotelSeeder

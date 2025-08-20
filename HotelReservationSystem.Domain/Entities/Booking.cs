@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace HotelReservationSystem.Domain.Entities
 {
     public class Booking:BaseEntity

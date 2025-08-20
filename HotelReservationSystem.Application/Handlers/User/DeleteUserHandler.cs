@@ -2,7 +2,6 @@
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
 using MediatR;
-
 namespace HotelReservationSystem.Application.Handlers.User
 {
     public class DeleteUserHandler : IRequestHandler<DeleteUserCommand,Unit>

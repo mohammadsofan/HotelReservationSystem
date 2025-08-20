@@ -3,8 +3,6 @@ using HotelReservationSystem.Application.Interfaces;
 using HotelReservationSystem.Application.Queries.User;
 using Mapster;
 using MediatR;
-using System.Collections;
-
 namespace HotelReservationSystem.Application.Handlers.User
 {
     public class GetUsersByFilterHandler : IRequestHandler<GetUsersByFilterQuery, ICollection<UserResponseDto>>

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using HotelReservationSystem.Application.Dtos.Facility.Requests;
 using HotelReservationSystem.Application.Dtos.Facility.Responses;

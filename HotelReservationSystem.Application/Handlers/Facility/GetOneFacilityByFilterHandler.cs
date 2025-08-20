@@ -4,7 +4,6 @@ using HotelReservationSystem.Application.Interfaces;
 using HotelReservationSystem.Application.Queries.Facility;
 using Mapster;
 using MediatR;
-
 namespace HotelReservationSystem.Application.Handlers.Facility
 {
     public class GetOneFacilityByFilterHandler : IRequestHandler<GetOneFacilityByFilterQuery, FacilityResponseDto>

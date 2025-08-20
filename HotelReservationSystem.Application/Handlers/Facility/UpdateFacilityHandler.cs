@@ -1,9 +1,7 @@
 ﻿using HotelReservationSystem.Application.Commands.Facility;
-using HotelReservationSystem.Application.Dtos.Facility.Responses;
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
 using MediatR;
-
 namespace HotelReservationSystem.Application.Handlers.Facility
 {
     public class UpdateFacilityHandler : IRequestHandler<UpdateFacilityCommand, Unit>

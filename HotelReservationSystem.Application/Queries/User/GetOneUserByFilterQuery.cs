@@ -1,7 +1,6 @@
 ﻿using HotelReservationSystem.Application.Dtos.User.Responses;
 using MediatR;
 using System.Linq.Expressions;
-
 namespace HotelReservationSystem.Application.Queries.User
 {
     public class GetOneUserByFilterQuery:IRequest<UserResponseDto>

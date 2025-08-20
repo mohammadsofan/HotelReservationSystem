@@ -1,9 +1,7 @@
 ﻿using HotelReservationSystem.Application.Commands.User;
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
-using Mapster;
 using MediatR;
-
 namespace HotelReservationSystem.Application.Handlers.User
 {
     public class UpdateUserHandler : IRequestHandler<UpdateUserCommand,Unit>

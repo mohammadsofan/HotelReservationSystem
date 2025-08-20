@@ -3,8 +3,6 @@ using HotelReservationSystem.Application.Dtos.User.Responses;
 using HotelReservationSystem.Application.Interfaces;
 using Mapster;
 using MediatR;
-
-
 namespace HotelReservationSystem.Application.Handlers.User
 {
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, UserResponseDto>

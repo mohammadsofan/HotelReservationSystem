@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using HotelReservationSystem.Application.Commands.Facility;
-
 namespace HotelReservationSystem.Application.Validators.Facility
 {
     public class CreateFacilityCommandValidator : AbstractValidator<CreateFacilityCommand>

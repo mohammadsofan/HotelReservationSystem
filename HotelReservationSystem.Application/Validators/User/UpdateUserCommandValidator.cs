@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using HotelReservationSystem.Application.Commands.User;
-
 namespace HotelReservationSystem.Application.Validators.User
 {
     public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>

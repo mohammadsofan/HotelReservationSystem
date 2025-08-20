@@ -1,7 +1,6 @@
 ﻿using HotelReservationSystem.Application.Dtos.Facility.Responses;
 using MediatR;
 using System.Linq.Expressions;
-
 namespace HotelReservationSystem.Application.Queries.Facility
 {
     public class GetFacilitiesByFilterQuery:IRequest<ICollection<FacilityResponseDto>>

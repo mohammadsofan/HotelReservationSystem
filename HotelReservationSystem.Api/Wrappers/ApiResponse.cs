@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace HotelReservationSystem.Api.Wrappers
+﻿namespace HotelReservationSystem.Api.Wrappers
 {
     public class ApiResponse<T>
     {
