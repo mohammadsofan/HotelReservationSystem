@@ -6,12 +6,13 @@ using HotelReservationSystem.Application.Commands.Facility;
 using HotelReservationSystem.Application.Queries.Facility;
 using HotelReservationSystem.Api.Wrappers;
 using Microsoft.AspNetCore.Authorization;
+using HotelReservationSystem.Domain.Constants;
 
 namespace HotelReservationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles =ApplicationRoles.Admin)]
     public class FacilitiesController : ControllerBase
     {
         private readonly IMediator _mediator;

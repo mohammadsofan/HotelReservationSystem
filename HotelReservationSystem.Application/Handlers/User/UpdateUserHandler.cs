@@ -26,7 +26,7 @@ namespace HotelReservationSystem.Application.Handlers.User
             existingUser.LastName = requestDto.LastName;
             existingUser.PhoneNumber = requestDto.PhoneNumber;
             existingUser.UpdatedAt = DateTime.UtcNow;
-            await _userRepository.UpdateAsync(existingUser, cancellationToken);
+            await _userRepository.UpdateAsync(userId,existingUser, cancellationToken);
             return Unit.Value;
         }
     }

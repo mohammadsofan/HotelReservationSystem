@@ -47,10 +47,18 @@ namespace HotelReservationSystem.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(filter);
         }
 
-        public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateAsync(long id,T entity, CancellationToken cancellationToken = default)
         {
-           _dbSet.Update(entity);
-           await _context.SaveChangesAsync(cancellationToken);
+            var existingEntity = await _dbSet.FindAsync(id, cancellationToken);
+            if(existingEntity == null)
+            {
+                return false;
+            }
+            entity.Id = existingEntity.Id;
+            entity.CreatedAt = existingEntity.CreatedAt;
+            entity.UpdatedAt = DateTime.UtcNow;
+            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+            await _context.SaveChangesAsync(cancellationToken);
            return true;
         }
     }

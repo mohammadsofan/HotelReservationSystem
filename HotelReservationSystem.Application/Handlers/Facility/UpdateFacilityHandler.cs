@@ -1,6 +1,7 @@
 ﻿using HotelReservationSystem.Application.Commands.Facility;
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
+using Mapster;
 using MediatR;
 namespace HotelReservationSystem.Application.Handlers.Facility
 {
@@ -15,16 +16,13 @@ namespace HotelReservationSystem.Application.Handlers.Facility
         public async Task<Unit> Handle(UpdateFacilityCommand request, CancellationToken cancellationToken)
         {
             var facilityId = request.FacilityId;
-            var existingFacility = await _facilityRepository.GetOneByFilterAsync(f => f.Id == facilityId);
-            if(existingFacility == null)
+            var requestDto = request.RequestDto;
+            var facility = requestDto.Adapt<Domain.Entities.Facility>();
+            var result = await _facilityRepository.UpdateAsync(facilityId, facility, cancellationToken);
+            if (!result)
             {
                 throw new NotFoundException($"Facility with ID {facilityId} not found.");
             }
-            var requestDto = request.RequestDto;
-            existingFacility.Description = requestDto.Description;
-            existingFacility.Name = requestDto.Name;
-            existingFacility.UpdatedAt = DateTime.UtcNow;
-            await _facilityRepository.UpdateAsync(existingFacility, cancellationToken);
             return Unit.Value;
         }
     }

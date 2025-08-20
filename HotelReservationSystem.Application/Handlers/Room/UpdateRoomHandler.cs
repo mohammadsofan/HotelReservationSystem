@@ -1,6 +1,7 @@
 ﻿using HotelReservationSystem.Application.Commands.Room;
 using HotelReservationSystem.Application.Exceptions;
 using HotelReservationSystem.Application.Interfaces;
+using Mapster;
 using MediatR;
 namespace HotelReservationSystem.Application.Handlers.Room
 {
@@ -15,18 +16,12 @@ namespace HotelReservationSystem.Application.Handlers.Room
         {
             var roomId = request.RoomId;
             var requestDto = request.RequestDto;
-            var existingRoom = await _roomRepository.GetOneByFilterAsync(r=>r.Id == roomId);
-            if (existingRoom == null)
+            var room = requestDto.Adapt<Domain.Entities.Room>();
+            var result = await _roomRepository.UpdateAsync(roomId, room, cancellationToken);
+            if (!result)
             {
-                throw new NotFoundException($"Room with id {roomId} not found.");
+                throw new NotFoundException($"Room with ID {roomId} not found.");
             }
-            existingRoom.PricePerNight = requestDto.PricePerNight;
-            existingRoom.MaxOccupancy = requestDto.MaxOccupancy;
-            existingRoom.Type = requestDto.Type;
-            existingRoom.FloorNumber = requestDto.FloorNumber;
-            existingRoom.RoomNumber = requestDto.RoomNumber;
-            existingRoom.UpdatedAt = DateTime.UtcNow;
-            await _roomRepository.UpdateAsync(existingRoom,cancellationToken);
             return Unit.Value;
         }
     }

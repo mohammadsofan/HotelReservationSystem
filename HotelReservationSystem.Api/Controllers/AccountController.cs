@@ -3,6 +3,7 @@ using HotelReservationSystem.Application.Commands.User;
 using HotelReservationSystem.Application.Dtos.User.Requests;
 using HotelReservationSystem.Application.Dtos.User.Responses;
 using HotelReservationSystem.Application.Queries.User;
+using HotelReservationSystem.Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace HotelReservationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles=ApplicationRoles.Admin)]
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -45,10 +45,22 @@ namespace HotelReservationSystem.Api.Middlewares
                         response = ApiResponse.Fail(authException.Message);
                         break;
                     }
+                case UnauthorizedAccessException unauthorizedAccessException:
+                    {
+                        statusCode = HttpStatusCode.Forbidden;
+                        response = ApiResponse.Fail(unauthorizedAccessException.Message);
+                        break;
+                    }
+                case ConflictException conflictException:
+                    {
+                        statusCode = HttpStatusCode.Conflict;
+                        response = ApiResponse.Fail(conflictException.Message);
+                        break;
+                    }
                 default:
                     {
                         statusCode = HttpStatusCode.InternalServerError;
-                        response = ApiResponse.Fail("Unexpected error occured.");
+                        response = ApiResponse.Fail($"Unexpected error occured. {ex.Message} {ex.InnerException?.Message}");
                         break;
                     }
             }

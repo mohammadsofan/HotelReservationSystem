@@ -6,7 +6,7 @@ namespace HotelReservationSystem.Application.Interfaces
         Task<IEnumerable<T>> GetAllByFilterAsync(Expression<Func<T,bool>>? filter = null);
         Task<T?> GetOneByFilterAsync(Expression<Func<T, bool>> filter);
         Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default);
-        Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default);
+        Task<bool> UpdateAsync(long Id, T entity, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(long id, CancellationToken cancellationToken = default);
 
     }
