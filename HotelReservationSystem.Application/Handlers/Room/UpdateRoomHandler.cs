@@ -29,9 +29,11 @@ namespace HotelReservationSystem.Application.Handlers.Room
             {
                 throw new NotFoundException($"Room with id {roomId} not found.");
             }
-            var room = requestDto.Adapt<Domain.Entities.Room>();
-            room.Id=existingRoom.Id;
-            await _roomRepository.UpdateAsync(room);
+            existingRoom.PricePerNight = requestDto.PricePerNight;
+            existingRoom.MaxOccupancy = requestDto.MaxOccupancy;
+            existingRoom.Type = requestDto.Type;
+            existingRoom.UpdatedAt = DateTime.UtcNow;
+            await _roomRepository.UpdateAsync(existingRoom,cancellationToken);
             return Unit.Value;
         }
     }

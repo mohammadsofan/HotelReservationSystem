@@ -26,7 +26,7 @@ namespace HotelReservationSystem.Application.Handlers.Room
             var filter = request.Filter;
             var room = await _roomRepository.GetOneByFilterAsync(filter);
             if (room == null) {
-                throw new NotFoundException($"Room with filter not found.");
+                throw new NotFoundException($"Room not found.");
             }
             return room.Adapt<RoomResponseDto>();
         }
