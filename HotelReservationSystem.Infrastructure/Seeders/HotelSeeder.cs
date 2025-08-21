@@ -11,7 +11,7 @@ namespace HotelReservationSystem.Infrastructure.Seeders
         private readonly ApplicationDbContext _context;
         private readonly IMediator _mediator;
 
-        public HotelSeeder(ApplicationDbContext context,IMediator mediator)
+        public HotelSeeder(ApplicationDbContext context, IMediator mediator)
         {
             _context = context;
             _mediator = mediator;
@@ -22,16 +22,17 @@ namespace HotelReservationSystem.Infrastructure.Seeders
             {
                 await _context.Database.MigrateAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception($"could not Migrate the database",ex);
+                throw new Exception($"could not Migrate the database", ex);
             }
 
             try
             {
                 if (await _context.Database.CanConnectAsync())
                 {
-                    if (!_context.Users.Any()) {
+                    if (!_context.Users.Any())
+                    {
                         var admin = await _mediator.Send(new CreateUserCommand(
                              new CreateUserRequestDto()
                              {
@@ -39,17 +40,18 @@ namespace HotelReservationSystem.Infrastructure.Seeders
                                  FirstName = "Admin",
                                  LastName = "Admin",
                                  Password = "Admin@123",
+                                 ConfirmPassword = "Admin@123",
                                  IdCard = "00000000",
                                  PhoneNumber = "0000000000",
                                  Username = "Admin"
-                                
-                             },ApplicationRoles.Admin));
+
+                             }, ApplicationRoles.Admin));
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not connect to the db",ex);
+                throw new Exception($"Could not connect to the db", ex);
             }
         }
     }

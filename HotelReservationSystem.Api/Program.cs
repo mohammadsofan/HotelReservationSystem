@@ -56,7 +56,7 @@ namespace HotelReservationSystem.Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
@@ -69,7 +69,8 @@ namespace HotelReservationSystem.Api
 
             app.MapControllers();
 
-            using (var scope = app.Services.CreateScope()) {
+            using (var scope = app.Services.CreateScope())
+            {
                 var seeder = scope.ServiceProvider.GetRequiredService<HotelSeeder>();
                 await seeder.Seed();
             }
