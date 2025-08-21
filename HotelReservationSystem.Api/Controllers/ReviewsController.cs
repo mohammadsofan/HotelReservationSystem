@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MediatR;
+﻿using HotelReservationSystem.Api.Wrappers;
+using HotelReservationSystem.Application.Commands.Review;
 using HotelReservationSystem.Application.Dtos.Review.Requests;
 using HotelReservationSystem.Application.Dtos.Review.Responses;
-using HotelReservationSystem.Application.Commands.Review;
 using HotelReservationSystem.Application.Queries.Review;
-using HotelReservationSystem.Api.Wrappers;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using HotelReservationSystem.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 namespace HotelReservationSystem.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -20,9 +20,9 @@ namespace HotelReservationSystem.Api.Controllers
         {
             _mediator = mediator;
         }
-    
+
         [HttpGet]
-        [Authorize(Roles =ApplicationRoles.Admin)]
+        [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetAllReviewsAsync()
         {
             var res = await _mediator.Send(new GetReviewsByFilterQuery());
@@ -40,7 +40,7 @@ namespace HotelReservationSystem.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllRoomReviewsAsync([FromRoute] long id)
         {
-            var res = await _mediator.Send(new GetReviewsByFilterQuery(r=>r.RoomId == id));
+            var res = await _mediator.Send(new GetReviewsByFilterQuery(r => r.RoomId == id));
             return Ok(ApiResponse<IEnumerable<ReviewResponseDto>>.Ok("Reviews retrieved successfully.", res));
         }
         [HttpGet("User/{id}")]
@@ -51,16 +51,20 @@ namespace HotelReservationSystem.Api.Controllers
             return Ok(ApiResponse<IEnumerable<ReviewResponseDto>>.Ok("Reviews retrieved successfully.", res));
         }
         [HttpPost]
-        [Authorize(Roles =$"{ApplicationRoles.Admin},{ApplicationRoles.Guest}")]
+        [Authorize(Roles = $"{ApplicationRoles.Admin},{ApplicationRoles.Guest}")]
         public async Task<IActionResult> CreateReviewAsync([FromBody] ReviewRequestDto request)
         {
             var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if(role != ApplicationRoles.Admin)
+            if (role != ApplicationRoles.Admin)
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                request.UserId = long.Parse(userId ?? "-1");
+                if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var id))
+                {
+                    return Unauthorized(ApiResponse.Fail("Unauthorized"));
+                }
+                request.UserId = id;
             }
-            var res = await _mediator.Send(new CreateReviewCommand(role??ApplicationRoles.Guest,request));
+            var res = await _mediator.Send(new CreateReviewCommand(role ?? ApplicationRoles.Guest, request));
             return CreatedAtRoute(nameof(GetReviewByIdAsync), new { id = res.Id }, ApiResponse<ReviewResponseDto>.Ok("Review created successfully.", res));
         }
 

@@ -24,8 +24,8 @@ namespace HotelReservationSystem.Application.Handlers.Booking
         public async Task<Unit> Handle(UpdateBookingCommand request, CancellationToken cancellationToken)
         {
             var bookingId = request.BookingId;
-            var existingBooking = await _bookingRepository.GetOneByFilterAsync(b=>b.Id == bookingId);
-            if(existingBooking == null)
+            var existingBooking = await _bookingRepository.GetOneByFilterAsync(b => b.Id == bookingId);
+            if (existingBooking == null)
             {
                 throw new NotFoundException($"Booking with ID {bookingId} not found.");
             }
@@ -42,9 +42,13 @@ namespace HotelReservationSystem.Application.Handlers.Booking
             {
                 throw new NotFoundException($"Room with ID {requestDto.RoomId} not found.");
             }
+            if (requestDto.GuestsNumber > room.MaxOccupancy)
+            {
+                throw new ConflictException($"Number of guests ({requestDto.GuestsNumber}) exceeds the room max occupancy of {room.MaxOccupancy}.");
+            }
             var conflictRoomBookings = await _bookingRepository.GetAllByFilterAsync(b => b.RoomId == roomId &&
             b.Id != bookingId &&
-            (requestDto.CheckIn <= b.CheckOut)&&
+            (requestDto.CheckIn <= b.CheckOut) &&
             (requestDto.CheckOut >= b.CheckIn));
             if (conflictRoomBookings.Any())
             {

@@ -36,7 +36,13 @@ namespace HotelReservationSystem.Application.Handlers.Booking
             {
                 throw new NotFoundException($"Room with ID {requestDto.RoomId} not found.");
             }
-            var conflictRoomBookings = await _bookingRepository.GetAllByFilterAsync(b => b.RoomId == roomId && (requestDto.CheckIn <= b.CheckOut) && (requestDto.CheckOut >= b.CheckIn));
+            if (requestDto.GuestsNumber > room.MaxOccupancy)
+            {
+                throw new ConflictException($"Number of guests ({requestDto.GuestsNumber}) exceeds the room max occupancy of {room.MaxOccupancy}.");
+            }
+            var conflictRoomBookings = await _bookingRepository.GetAllByFilterAsync(b => b.RoomId == roomId
+            && (requestDto.CheckIn <= b.CheckOut)
+            && (requestDto.CheckOut >= b.CheckIn));
 
             if (conflictRoomBookings.Any())
             {
