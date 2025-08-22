@@ -5,16 +5,21 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Logging;
+
 namespace HotelReservationSystem.Infrastructure.Services
 {
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;
-        public TokenService(IOptions<JwtSettings> jwtSettings) { 
+        private readonly ILogger<TokenService> _logger;
+        public TokenService(IOptions<JwtSettings> jwtSettings, ILogger<TokenService> logger) { 
             _jwtSettings = jwtSettings.Value;
+            _logger = logger;
         }
         public string GenerateToken(string userId, string userName, string email, string role)
         {
+            _logger.LogInformation("Generating JWT token for user {UserId}, email {Email}, role {Role}", userId, email, role);
             var claims = new List<Claim>() {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Name, userName),
@@ -28,7 +33,9 @@ namespace HotelReservationSystem.Infrastructure.Services
                 signingCredentials: creds,
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes)
             );
-            return new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            _logger.LogInformation("JWT token generated for user {UserId}", userId);
+            return token;
         }
     }
 }
