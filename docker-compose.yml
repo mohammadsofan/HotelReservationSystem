@@ -16,6 +16,7 @@ services:
      - my_network
     depends_on:
      - db
+     - seq
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: db_container
@@ -26,3 +27,18 @@ services:
      - my_network
     ports:
      - "1433:1433"
+  seq:
+     image: datalust/seq:latest
+     container_name: seq_container
+     ports:
+       - "9090:80"
+       - "5341:5341"
+     environment:
+       - ACCEPT_EULA=Y
+       - SEQ_FIRSTRUN_ADMINPASSWORD=admin@123
+     networks:
+       - my_network
+     volumes:
+       - seq_data:/data
+volumes:
+    seq_data:
