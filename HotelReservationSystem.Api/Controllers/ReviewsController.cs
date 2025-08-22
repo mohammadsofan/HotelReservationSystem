@@ -15,17 +15,21 @@ namespace HotelReservationSystem.Api.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<ReviewsController> _logger;
 
-        public ReviewsController(IMediator mediator)
+        public ReviewsController(IMediator mediator, ILogger<ReviewsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetAllReviewsAsync()
         {
+            _logger.LogInformation("Getting all reviews.");
             var res = await _mediator.Send(new GetReviewsByFilterQuery());
+            _logger.LogInformation("Reviews retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<ReviewResponseDto>>.Ok("Reviews retrieved successfully.", res));
         }
 
@@ -33,38 +37,47 @@ namespace HotelReservationSystem.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetReviewByIdAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting review by ID {ReviewId}.", id);
             var res = await _mediator.Send(new GetOneReviewByFilterQuery(r => r.Id == id));
+            _logger.LogInformation("Review retrieved successfully.");
             return Ok(ApiResponse<ReviewResponseDto>.Ok("Review retrieved successfully.", res));
         }
         [HttpGet("Room/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllRoomReviewsAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting reviews for room {RoomId}.", id);
             var res = await _mediator.Send(new GetReviewsByFilterQuery(r => r.RoomId == id));
+            _logger.LogInformation("Room reviews retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<ReviewResponseDto>>.Ok("Reviews retrieved successfully.", res));
         }
         [HttpGet("User/{id}")]
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetAllUserReviewsAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting reviews for user {UserId}.", id);
             var res = await _mediator.Send(new GetReviewsByFilterQuery(r => r.UserId == id));
+            _logger.LogInformation("User reviews retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<ReviewResponseDto>>.Ok("Reviews retrieved successfully.", res));
         }
         [HttpPost]
         [Authorize(Roles = $"{ApplicationRoles.Admin},{ApplicationRoles.Guest}")]
         public async Task<IActionResult> CreateReviewAsync([FromBody] ReviewRequestDto request)
         {
+            _logger.LogInformation("Creating review.");
             var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             if (role != ApplicationRoles.Admin)
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var id))
                 {
+                    _logger.LogWarning("User ID not found in claims for review creation.");
                     return Unauthorized(ApiResponse.Fail("Unauthorized"));
                 }
                 request.UserId = id;
             }
             var res = await _mediator.Send(new CreateReviewCommand(role ?? ApplicationRoles.Guest, request));
+            _logger.LogInformation("Review created successfully for user with ID {id}.", request.UserId);
             return CreatedAtRoute(nameof(GetReviewByIdAsync), new { id = res.Id }, ApiResponse<ReviewResponseDto>.Ok("Review created successfully.", res));
         }
 
@@ -72,7 +85,9 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> UpdateReviewAsync([FromRoute] long id, [FromBody] ReviewRequestDto request)
         {
+            _logger.LogInformation("Updating review with ID {ReviewId}.", id);
             await _mediator.Send(new UpdateReviewCommand(id, request));
+            _logger.LogInformation("Review updated successfully.");
             return NoContent();
         }
 
@@ -80,7 +95,9 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> DeleteReviewAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Deleting review with ID {ReviewId}.", id);
             await _mediator.Send(new DeleteReviewCommand(id));
+            _logger.LogInformation("Review deleted successfully.");
             return NoContent();
         }
     }

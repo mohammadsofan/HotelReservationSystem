@@ -16,17 +16,21 @@ namespace HotelReservationSystem.Api.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<BookingsController> _logger;
 
-        public BookingsController(IMediator mediator)
+        public BookingsController(IMediator mediator, ILogger<BookingsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetAllBookingsAsync()
         {
+            _logger.LogInformation("Getting all bookings.");
             var res = await _mediator.Send(new GetBookingsByFilterQuery());
+            _logger.LogInformation("Bookings retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<BookingResponseDto>>.Ok("Bookings retrieved successfully.", res));
         }
 
@@ -34,7 +38,9 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetBookingByIdAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting booking by ID {BookingId}.", id);
             var res = await _mediator.Send(new GetOneBookingByFilterQuery(b => b.Id == id));
+            _logger.LogInformation("Booking retrieved successfully.");
             return Ok(ApiResponse<BookingResponseDto>.Ok("Booking retrieved successfully.", res));
         }
 
@@ -42,7 +48,9 @@ namespace HotelReservationSystem.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllRoomBookingsAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting bookings for room {RoomId}.", id);
             var res = await _mediator.Send(new GetBookingsByFilterQuery(b => b.RoomId == id));
+            _logger.LogInformation("Room bookings retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<BookingResponseDto>>.Ok("Bookings retrieved successfully.", res));
         }
 
@@ -50,7 +58,25 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> GetAllUserBookingsAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Getting bookings for user {UserId}.", id);
             var res = await _mediator.Send(new GetBookingsByFilterQuery(b => b.UserId == id));
+            _logger.LogInformation("User bookings retrieved successfully.");
+            return Ok(ApiResponse<IEnumerable<BookingResponseDto>>.Ok("Bookings retrieved successfully.", res));
+        }
+
+        [HttpGet("current")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUserBookingsAsync()
+        {
+            _logger.LogInformation("Getting bookings for current logged-in user.");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var id))
+            {
+                _logger.LogWarning("User ID not found in claims for current user bookings.");
+                return Unauthorized(ApiResponse<string>.Fail("User ID not found in claims."));
+            }
+            var res = await _mediator.Send(new GetBookingsByFilterQuery(b => b.UserId == id));
+            _logger.LogInformation("Current user bookings retrieved successfully.");
             return Ok(ApiResponse<IEnumerable<BookingResponseDto>>.Ok("Bookings retrieved successfully.", res));
         }
 
@@ -58,17 +84,20 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = $"{ApplicationRoles.Admin},{ApplicationRoles.Guest}")]
         public async Task<IActionResult> CreateBookingAsync([FromBody] BookingRequestDto request)
         {
+            _logger.LogInformation("Creating booking.");
             var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             if (role != ApplicationRoles.Admin)
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var id))
                 {
+                    _logger.LogWarning("User ID not found in claims for booking creation.");
                     return Unauthorized(ApiResponse.Fail("Unauthorized"));
                 }
                 request.UserId = id;
             }
             var res = await _mediator.Send(new CreateBookingCommand(request));
+            _logger.LogInformation("Booking created successfully.");
             return CreatedAtRoute(nameof(GetBookingByIdAsync), new { id = res.Id }, ApiResponse<BookingResponseDto>.Ok("Booking created successfully.", res));
         }
 
@@ -76,7 +105,9 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> UpdateBookingAsync([FromRoute] long id, [FromBody] BookingRequestDto request)
         {
+            _logger.LogInformation("Updating booking with ID {BookingId}.", id);
             await _mediator.Send(new UpdateBookingCommand(id, request));
+            _logger.LogInformation("Booking updated successfully.");
             return NoContent();
         }
 
@@ -84,21 +115,10 @@ namespace HotelReservationSystem.Api.Controllers
         [Authorize(Roles = ApplicationRoles.Admin)]
         public async Task<IActionResult> DeleteBookingAsync([FromRoute] long id)
         {
+            _logger.LogInformation("Deleting booking with ID {BookingId}.", id);
             await _mediator.Send(new DeleteBookingCommand(id));
+            _logger.LogInformation("Booking deleted successfully.");
             return NoContent();
-        }
-
-        [HttpGet("current-user")]
-        [Authorize]
-        public async Task<IActionResult> GetCurrentUserBookingsAsync()
-        {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId) || !long.TryParse(userId, out var id))
-            {
-                return Unauthorized(ApiResponse.Fail("Unauthorized"));
-            }
-            var res = await _mediator.Send(new GetBookingsByFilterQuery(b => b.UserId == id));
-            return Ok(ApiResponse<IEnumerable<BookingResponseDto>>.Ok("Bookings retrieved successfully.", res));
         }
     }
 }
