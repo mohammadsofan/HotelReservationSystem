@@ -41,7 +41,7 @@ namespace HotelReservationSystem.Infrastructure.Extensions
                 options.Configuration = configuration.GetSection("Redis")["url"];
                 options.InstanceName = "HotelReservationSystem_";
             });
-            services.AddScoped<ICachService, CachService>();
+            services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<HotelSeeder>();
             services.AddScoped<IUserRepository, UserRepository>();

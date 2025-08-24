@@ -4,12 +4,12 @@ using System.Text.Json;
 
 namespace HotelReservationSystem.Infrastructure.Services
 {
-    public class CachService : ICachService
+    public class CacheService : ICacheService
     {
         private readonly IDistributedCache _distributedCache;
         private readonly DistributedCacheEntryOptions _defaultOptions;
 
-        public CachService(IDistributedCache distributedCache)
+        public CacheService(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
             _defaultOptions = new DistributedCacheEntryOptions()
@@ -28,12 +28,12 @@ namespace HotelReservationSystem.Infrastructure.Services
             return JsonSerializer.Deserialize<T>(cachedData);
         }
 
-        public async Task Remove(string key)
+        public async Task RemoveAsync(string key)
         {
             await _distributedCache.RemoveAsync(key);
         }
 
-        public async Task Set<T>(string key, T value)
+        public async Task SetAsync<T>(string key, T value)
         {
             var serializedData = JsonSerializer.Serialize(value);
             await _distributedCache.SetStringAsync(key, serializedData, _defaultOptions);

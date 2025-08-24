@@ -1,9 +1,9 @@
 ﻿namespace HotelReservationSystem.Application.Interfaces
 {
-    public interface ICachService
+    public interface ICacheService
     {
         Task<T?> GetAsync<T>(string key) where T : class;
-        Task Set<T>(string key, T value);
-        Task Remove(string key);
+        Task SetAsync<T>(string key, T value);
+        Task RemoveAsync(string key);
     }
 }
