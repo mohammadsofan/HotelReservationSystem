@@ -17,6 +17,7 @@ services:
     depends_on:
      - db
      - seq
+     - redis
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: db_container
@@ -27,6 +28,16 @@ services:
      - my_network
     ports:
      - "1433:1433"
+  redis:
+    image: "redis:alpine"
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - my_network
   seq:
      image: datalust/seq:latest
      container_name: seq_container
@@ -42,3 +53,4 @@ services:
        - seq_data:/data
 volumes:
     seq_data:
+    redis_data:
