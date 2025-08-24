@@ -1,0 +1,65 @@
+networks:
+  my_network:
+   driver: bridge
+services:
+  api_project:
+    build:
+     context: .
+     dockerfile: ./HotelReservationSystem.Api/Dockerfile
+    container_name: api_project_container
+    ports:
+     - "5001:8080"
+     - "5002:8081"
+    environment:
+     - ConnectionStrings__DefaultConnection=Server=db;Database=HotelReservationSystem;User Id=sa;Password=Sofan@12345#;Trusted_Connection=false;TrustServerCertificate=True;
+    networks:
+     - my_network
+    depends_on:
+     - db
+     - seq
+     - redis
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db_container
+    environment:
+     SA_PASSWORD: "Sofan@12345#"
+     ACCEPT_EULA: "Y"
+    networks:
+     - my_network
+    ports:
+     - "1433:1433"
+  redis:
+    image: "redis:alpine"
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - my_network
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_commander
+    environment:
+    - REDIS_HOSTS=local:redis:6379
+    ports:
+    - "7001:8081"
+    networks:
+    - my_network
+  seq:
+     image: datalust/seq:latest
+     container_name: seq_container
+     ports:
+       - "9090:80"
+       - "5341:5341"
+     environment:
+       - ACCEPT_EULA=Y
+       - SEQ_FIRSTRUN_ADMINPASSWORD=admin@123
+     networks:
+       - my_network
+     volumes:
+       - seq_data:/data
+volumes:
+    seq_data:
+    redis_data:
