@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc; 
-using MediatR;
+﻿using HotelReservationSystem.Api.Wrappers;
+using HotelReservationSystem.Application.Commands.Room;
+using HotelReservationSystem.Application.Dtos.Facility.Responses;
 using HotelReservationSystem.Application.Dtos.Room.Requests;
 using HotelReservationSystem.Application.Dtos.Room.Responses;
-using HotelReservationSystem.Application.Commands.Room;
 using HotelReservationSystem.Application.Queries.Room;
-using HotelReservationSystem.Api.Wrappers;
-using Microsoft.AspNetCore.Authorization;
 using HotelReservationSystem.Domain.Constants;
-using HotelReservationSystem.Application.Dtos.Facility.Responses;
-using Microsoft.Extensions.Logging;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace HotelReservationSystem.Api.Controllers
 {
@@ -19,19 +20,37 @@ namespace HotelReservationSystem.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<RoomsController> _logger;
+        private readonly IDistributedCache _distributedCache;
 
-        public RoomsController(IMediator mediator, ILogger<RoomsController> logger)
+        public RoomsController(IMediator mediator,
+            ILogger<RoomsController> logger,
+            IDistributedCache distributedCache)
         {
             _mediator = mediator;
             _logger = logger;
+            _distributedCache = distributedCache;
         }
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllRoomsAsync()
         {
             _logger.LogInformation("Getting all rooms.");
+            var chachKey = "AllRooms";
+            var cachedRooms = await _distributedCache.GetStringAsync(chachKey);
+            if (!string.IsNullOrEmpty(cachedRooms))
+            {
+                _logger.LogInformation("Rooms found in cache.");
+                var roomDtos = JsonSerializer.Deserialize<IEnumerable<RoomResponseDto>>(cachedRooms);
+                return Ok(ApiResponse<IEnumerable<RoomResponseDto>>.Ok("Rooms retrieved successfully.", roomDtos));
+            }
             var res = await _mediator.Send(new GetRoomsByFilterQuery());
             _logger.LogInformation("Rooms retrieved successfully.");
+            var serializedRooms = JsonSerializer.Serialize(res);
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+                SlidingExpiration = TimeSpan.FromMinutes(2)
+            };
             return Ok(ApiResponse<IEnumerable<RoomResponseDto>>.Ok("Rooms retrieved successfully.", res));
         }
         [AllowAnonymous]
@@ -39,8 +58,24 @@ namespace HotelReservationSystem.Api.Controllers
         public async Task<IActionResult> GetRoomByIdAsync([FromRoute] long id)
         {
             _logger.LogInformation("Getting room by ID {RoomId}.", id);
-            var res = await _mediator.Send(new GetOneRoomByFilterQuery(r=>r.Id==id));
+            var chachKey = $"Room_{id}";  
+            var cachedRoom = await _distributedCache.GetStringAsync(chachKey);
+            if (!string.IsNullOrEmpty(cachedRoom))
+            {
+                _logger.LogInformation("Room found in cache.");
+                var roomDto = JsonSerializer.Deserialize<RoomResponseDto>(cachedRoom);
+                return Ok(ApiResponse<RoomResponseDto>.Ok("Room retrieved successfully.", roomDto));
+            }
+            var res = await _mediator.Send(new GetOneRoomByFilterQuery(r => r.Id == id));
             _logger.LogInformation("Room retrieved successfully.");
+            var serializedRoom = JsonSerializer.Serialize(res);
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+                SlidingExpiration = TimeSpan.FromMinutes(2)
+            };
+            await _distributedCache.SetStringAsync(chachKey, serializedRoom, options);
+            _logger.LogInformation("Room cached successfully.");
             return Ok(ApiResponse<RoomResponseDto>.Ok("Room retrieved successfully.", res));
         }
         [HttpGet("{roomId}/facilities")]

@@ -23,7 +23,8 @@ namespace HotelReservationSystem.Application.Handlers.Room
             _logger.LogInformation("Retrieving single room with provided filter.");
             var filter = request.Filter;
             var room = await _roomRepository.GetOneByFilterAsync(filter);
-            if (room == null) {
+            if (room == null)
+            {
                 _logger.LogWarning("Room not found for provided filter.");
                 throw new NotFoundException($"Room not found.");
             }
