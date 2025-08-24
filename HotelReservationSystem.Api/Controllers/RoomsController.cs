@@ -51,9 +51,9 @@ namespace HotelReservationSystem.Api.Controllers
         public async Task<IActionResult> GetRoomByIdAsync([FromRoute] long id)
         {
             _logger.LogInformation("Getting room by ID {RoomId}.", id);
-            var cacheKey = $"Room_{id}";  
+            var cacheKey = $"Room_{id}";
             var roomDto = await _cacheService.GetAsync<RoomResponseDto>(cacheKey);
-            if (roomDto !=null)
+            if (roomDto != null)
             {
                 _logger.LogInformation("Room found in cache.");
                 return Ok(ApiResponse<RoomResponseDto>.Ok("Room retrieved successfully.", roomDto));
@@ -87,6 +87,9 @@ namespace HotelReservationSystem.Api.Controllers
             _logger.LogInformation("Assigning facility {FacilityId} to room {RoomId}.", facilityId, roomId);
             await _mediator.Send(new AssignFacilityToRoomCommand(roomId, facilityId));
             _logger.LogInformation("Facility assigned to room successfully.");
+            var cacheKey = $"Room_{roomId}_Facilities";
+            await _cacheService.RemoveAsync(cacheKey);
+            _logger.LogInformation("Cache for room facilities removed successfully.");
             return Created();
         }
         [HttpDelete("{roomId}/facility/{facilityId}")]
@@ -106,6 +109,8 @@ namespace HotelReservationSystem.Api.Controllers
             _logger.LogInformation("Creating room.");
             var res = await _mediator.Send(new CreateRoomCommand(request));
             _logger.LogInformation("Room created successfully.");
+            await _cacheService.RemoveAsync(AllRoomsCacheKey);
+            _logger.LogInformation("Cache for rooms removed successfully.");
             return CreatedAtRoute(nameof(GetRoomByIdAsync), new { id = res.Id }, ApiResponse<RoomResponseDto>.Ok("Room created successfully.", res));
         }
 
