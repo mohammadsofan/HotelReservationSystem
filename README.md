@@ -1,8 +1,8 @@
 # HotelReservationSystem
+=======
 
 A modular hotel reservation management system built with **ASP.NET Core 8**, **CQRS with MediatR**, **Entity Framework Core**, **Redis caching**, and **Serilog with Seq logging**.  
 The solution is structured with clean architecture principles: **Api**, **Application**, **Domain**, and **Infrastructure** layers.
-=======
 
 ---
 
